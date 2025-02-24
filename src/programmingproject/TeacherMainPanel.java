@@ -1,39 +1,22 @@
 package programmingproject;
 
-import com.formdev.flatlaf.FlatLightLaf;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class TeacherMainPanel extends JFrame {
 
     public TeacherMainPanel() {
-        // Set a modern FlatLaf look and feel
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (UnsupportedLookAndFeelException ex) {
-            System.err.println("Failed to initialize FlatLaf");
-        }
-
         setTitle("Teacher Control Panel");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(10, 10));
 
-        // Top panel with Back button
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton btnBack = new JButton("Back");
-        btnBack.addActionListener(e -> {
-            new TeacherLoginScreen();
-            dispose();
-        });
-        topPanel.add(btnBack);
-        add(topPanel, BorderLayout.NORTH);
-
-        // Main panel with buttons in a vertical BoxLayout for better spacing
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel panel = new JPanel(new GridLayout(6, 1, 10, 10));
 
         JButton btnStudentManagement = new JButton("Student Management");
         JButton btnCourseManagement = new JButton("Course Management");
@@ -41,29 +24,49 @@ public class TeacherMainPanel extends JFrame {
         JButton btnSendMessage = new JButton("Send Message to Students");
         JButton btnAttendance = new JButton("Attendance Management");
 
-        // Center buttons horizontally
-        btnStudentManagement.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCourseManagement.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnReporting.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnSendMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnSendMessage.addActionListener(e -> {
+            new TeacherMessageScreen();
+        });
 
-        buttonPanel.add(btnStudentManagement);
-        buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(btnCourseManagement);
-        buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(btnReporting);
-        buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(btnSendMessage);
-        buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(btnAttendance);
+        btnStudentManagement.addActionListener(e -> {
+            new StudentManagementScreen();
+        });
 
-        add(buttonPanel, BorderLayout.CENTER);
+        btnCourseManagement.addActionListener(e -> {
+            new CourseManagementScreen();
+        });
 
+        btnReporting.addActionListener(e -> {
+            TeacherReportScreen reportScreen = new TeacherReportScreen();
+            reportScreen.setVisible(true);
+        });
+        btnAttendance.addActionListener(e -> {
+            new AttendanceManagementScreen();
+        });
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton btnBack = new JButton("Back");
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+                new TeacherLoginScreen();
+                dispose();
+            }
+        });
+        topPanel.add(btnBack);
+        panel.add(topPanel);
+
+        panel.add(btnStudentManagement);
+        panel.add(btnCourseManagement);
+        panel.add(btnReporting);
+        panel.add(btnSendMessage);
+        panel.add(btnAttendance);
+        add(panel);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TeacherMainPanel());
+        new TeacherMainPanel();
     }
 }
